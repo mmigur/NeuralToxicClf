@@ -27,7 +27,12 @@ def preprocessing(text: str):
         return ' '.join([pymorphy2_analyzer.parse(word)[0].normal_form.strip() for word in text.split(' ')]).strip()
 
     def vectorize(text: str):
-        t = TOKENIZER(text, padding=True, truncation=True, return_tensors='pt')
+        t = TOKENIZER(
+            text, 
+            padding=True, 
+            truncation=True, 
+            return_tensors='pt'
+        )
         with torch.no_grad():
             model_output = RUBERT_MODEL(**{key: value.to(RUBERT_MODEL.device) for key, value in t.items()})
         embeddings = model_output.last_hidden_state[:, :, :]
